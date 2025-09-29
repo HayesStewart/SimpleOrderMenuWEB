@@ -1,0 +1,104 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>JS Functions</title>
+<style type="text/css">
+.item {width: 110px; display:inline-block;}
+.price {width: 100px; display:inline-block;  text-align:right}
+</style>
+</head>
+<body>
+    <script>
+        const PRICES = [4.99, 3.99, 1.79];
+        const ITEMS = ["Hotdogs", "French Fries", "Drinks"];
+        let numDogs, numFries, numDrink;
+        let subTotal;
+        let discount = 0;
+        let discountTotal;
+        let secondSubtotal;
+        let finalPrice;
+        
+        function showMoney(num){
+	        let x = parseFloat(num);
+	        x = x * 100;
+            let y = Math.round(x);
+            y = y/100;
+            return y;
+        }
+
+        function displayMenu(){
+            for (i=0; i< ITEMS.length; i++)
+            {
+                document.write("<div class='menu-item'>")
+                document.write("<div class='item'>" + (i+1) + ". " + ITEMS[i] +"</div>")
+                document.write("<div class='price'>"+ showMoney(PRICES[i]) +"</div>")
+                document.write ("</div>");
+            }
+        }
+
+        function getItem(itemNum){
+            order =prompt ("Enter the number of " + ITEMS[itemNum] );
+            console.log(order);
+            return order;
+        }
+
+        function order(){
+            for (itemNum=0; itemNum<ITEMS.length;itemNum++){
+
+                //setting the global quantitiy variables 
+                if(itemNum == 0){
+                    numDogs = getItem(itemNum);
+                    console.log("   set numDogs " + numDogs);
+                }
+                if(itemNum == 1){
+                    numFries = getItem(itemNum);
+                    console.log("   set numFries " + numFries);
+                }
+                if(itemNum == 2){
+                    numDrink = getItem(itemNum);
+                    console.log("   set numDrink " + numDrink);
+                }
+            }   
+            printRecipt();
+        }
+
+        function printRecipt(){
+            totalCalc();
+            s = "Your Order\n";
+            s+= numDogs + " " + ITEMS[0] + "  - " + showMoney(numDogs*PRICES[0]) + "\n";
+            s+= numFries + " " + ITEMS[1] + "  - " + showMoney(numFries*PRICES[1]) + "\n";
+            s+= numDrink + " " + ITEMS[2] + "  - " + showMoney(numDrink*PRICES[2]) + "\n";
+            s+= "subtotal (pre discount): " + subTotal + "\n";
+            if (discount != 0){
+                s+= "discount: " + showMoney(discount) + "\n";
+            }
+            s+= "subtotal (post discount): " + showMoney(secondSubtotal) + "\n";
+            s+= "tax: " + showMoney(finalPrice - secondSubtotal) + "\n";
+            s+= "final price " + finalPrice + "\n";
+
+            alert(s);
+            console.log(totalCalc());
+        }
+
+        function totalCalc(){
+            let total = (numDogs * PRICES[0]) + (numFries * PRICES[0]) + (numDrink * PRICES[2]);
+            subTotal = showMoney(total);
+            
+            //discount
+            if (subTotal >= 30){
+                discount = subTotal * 0.1;
+                discountTotal = subTotal - discount;
+                secondSubtotal = discountTotal;
+            } else {
+                secondSubtotal = subTotal;
+            }
+
+            finalPrice = showMoney(secondSubtotal * 1.065);;
+        }
+        displayMenu();
+    </script>
+    <hr />
+    <button onclick="order()">Place Order</button>
+</body>
+</html>
